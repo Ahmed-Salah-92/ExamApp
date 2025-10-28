@@ -7,4 +7,9 @@ class AppColors {
   static const Color blue = Color(0xFF02369C);
   static const Color placeholder = Color(0xFFA6A6A6);
   static const Color error = Color(0xFFCC1010);
+  static const Color green = Color(0xFF11CE19);
+  static const Color lightBlue = Color(0xFFEDEFF3);
+  static const Color lightGreen = Color(0xFFCAF9CC);
+  static const Color lightRed = Color(0xFFF8D2D2);
+
 }

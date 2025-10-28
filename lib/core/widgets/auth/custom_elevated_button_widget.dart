@@ -1,3 +1,4 @@
+import 'package:exam_app/core/values/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -32,17 +33,14 @@ class CustomElevatedButtonWidget extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: buttonColor ?? AppColors.blue,
-        fixedSize: Size(width ?? 331.w, height ?? 56.h),
+        fixedSize: Size(width ?? 343.w, height ?? 48.h),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius ?? 8.r),
+          borderRadius: BorderRadius.circular(borderRadius ?? 24.r),
         ),
       ),
       child: Text(
         buttonText ?? "",
-        style: TextStyle(
-          color: textColor ?? Colors.white,
-          fontSize: fontSize ?? 16.sp,
-        ),
+        style: AppTextStyles.white16MediumRoboto,
       ),
     );
   }
