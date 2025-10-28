@@ -13,6 +13,7 @@ class AuthValidation {
   }
 
   static String? passwordValidation(String? value) {
+    //^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
     final passwordRegex = RegExp(r'^(?=.*[a-zA-Z])(?=.*[0-9])');
 
     if (value == null) return "Password Required";

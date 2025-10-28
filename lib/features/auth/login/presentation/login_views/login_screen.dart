@@ -1,12 +1,15 @@
+import 'package:exam_app/core/values/app_strings.dart';
+import 'package:exam_app/core/values/app_text_styles.dart';
+import 'package:exam_app/core/widgets/custom_app_bar_widget.dart';
+import 'package:exam_app/core/widgets/custom_spacer_widget.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../config/di/di.dart';
 import '../../../../../core/validation/auth_validation.dart';
 import '../../../../../core/widgets/auth/custom_elevated_button_widget.dart';
 import '../../../../../core/widgets/auth/custom_rich_text_widget.dart';
 import '../../../../../core/widgets/auth/custom_text_field_widget.dart';
 import '../login_viewmodel/login_view_model.dart';
-
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -15,47 +18,77 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Login Screen')),
+    return CustomAppBarWidget(
+      true,
+      onBackPressed: () {},
+      title: AppStrings.login,
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
         child: Form(
           key: loginViewModel.formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 50),
               CustomEditTextFieldWidget(
-                labelText: "Email",
-                hintText: "Enter your email",
+                labelText: AppStrings.emailLabel,
+                hintText: AppStrings.emailHint,
                 validator: AuthValidation.emailValidation,
                 controller: loginViewModel.emailController,
               ),
-              const SizedBox(height: 16),
+              const CustomHeightSpaceWidget(24),
               CustomEditTextFieldWidget(
-                labelText: "Password",
-                hintText: "Enter your password",
+                labelText: AppStrings.passwordLabel,
+                hintText: AppStrings.passwordHint,
                 isPasswordField: true,
                 validator: AuthValidation.passwordValidation,
                 controller: loginViewModel.passwordController,
               ),
-              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: false, //loginViewModel.isRememberMe,
+                        onChanged: (bool? value) {
+                          //loginViewModel.setRememberMe(value ?? false);
+                        },
+                      ),
+                      Text(
+                        AppStrings.rememberMe,
+                        style: AppTextStyles.black13RegularInter,
+                      ),
+                    ],
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // Handle forget password action
+                    },
+                    child: Text(
+                      AppStrings.forgetPassword,
+                      style: AppTextStyles.black12RegularInter.copyWith(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const CustomHeightSpaceWidget(48),
               CustomElevatedButtonWidget(
                 onPressed: () {
                   loginViewModel.login();
                 },
-                buttonText: 'Login',
+                buttonText: AppStrings.login,
               ),
-              const SizedBox(height: 16),
+              const CustomHeightSpaceWidget(16),
               CustomRichTextWidget(
                 onTap: () {
                   // Handle navigation to registration screen
                 },
-                firstText: "Don't have an account? ",
-                secondText: "Register Now",
+                firstText: AppStrings.dontHaveAccount,
+                secondText: AppStrings.signUp,
               ),
-              const SizedBox(height: 50),
             ],
           ),
         ),

@@ -6,7 +6,6 @@ import '../../../data/model/request/auth_login_request_dto.dart';
 import '../../../data/model/response/auth_login_response.dart';
 import '../../api_client/auth_login_api_client.dart';
 
-
 @Injectable(as: AuthLoginRemoteDatasourceContract)
 class AuthLoginRemoteDatasourceImpl
     implements AuthLoginRemoteDatasourceContract {

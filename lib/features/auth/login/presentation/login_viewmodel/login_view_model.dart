@@ -4,7 +4,6 @@ import 'package:injectable/injectable.dart';
 import '../../data/model/request/auth_login_request_dto.dart';
 import '../../domain/usecase/auth_login_usecase.dart';
 
-
 @injectable
 class LoginViewModel {
   final AuthLoginUseCase authLoginUseCase;
