@@ -1,9 +1,8 @@
+import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
+import 'package:exam_app/features/auth/login/api/model/response/auth_login_api_response.dart';
+import 'package:exam_app/features/auth/login/data/datasource/remote/auth_login_remote_datasource_contract.dart';
+import 'package:exam_app/features/auth/login/domain/repo/auth_login_repo_contract.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../domain/repo/auth_login_repo_contract.dart';
-import '../datasource/remote/auth_login_remote_datasource_contract.dart';
-import '../model/request/auth_login_request_dto.dart';
-import '../model/response/auth_login_response.dart';
 
 @Injectable(as: AuthLoginRepoContract)
 class AuthLoginRepoImpl implements AuthLoginRepoContract {
@@ -12,12 +11,12 @@ class AuthLoginRepoImpl implements AuthLoginRepoContract {
   AuthLoginRepoImpl(this.authLoginRemoteDatasourceContract);
 
   @override
-  Future<AuthLoginResponse> login(
-    AuthLoginRequestDto loginRequestDto, {
+  Future<AuthLoginApiResponse> login(
+    AuthLoginAPiRequest loginApiRequest, {
     required bool isCheckedRememberMe,
   }) {
     try {
-      final response = authLoginRemoteDatasourceContract.login(loginRequestDto);
+      final response = authLoginRemoteDatasourceContract.login(loginApiRequest);
       if (isCheckedRememberMe) {
         // Handle remember me logic save credentials securely
       }

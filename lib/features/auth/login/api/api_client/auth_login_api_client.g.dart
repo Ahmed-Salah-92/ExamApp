@@ -8,7 +8,7 @@ part of 'auth_login_api_client.dart';
 // RetrofitGenerator
 // **************************************************************************
 
-// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
+// ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter,avoid_unused_constructor_parameters,unreachable_from_main
 
 class _AuthLoginApiClient implements AuthLoginApiClient {
   _AuthLoginApiClient(this._dio, {this.baseUrl, this.errorLogger});
@@ -20,13 +20,15 @@ class _AuthLoginApiClient implements AuthLoginApiClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AuthLoginResponse> login(AuthLoginRequestDto loginRequestDto) async {
+  Future<AuthLoginApiResponse> login(
+    AuthLoginAPiRequest loginApiRequest,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(loginRequestDto.toJson());
-    final _options = _setStreamType<AuthLoginResponse>(
+    _data.addAll(loginApiRequest.toJson());
+    final _options = _setStreamType<AuthLoginApiResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -37,9 +39,9 @@ class _AuthLoginApiClient implements AuthLoginApiClient {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late AuthLoginResponse _value;
+    late AuthLoginApiResponse _value;
     try {
-      _value = AuthLoginResponse.fromJson(_result.data!);
+      _value = AuthLoginApiResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

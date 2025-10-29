@@ -6,7 +6,7 @@ class CustomHeightSpaceWidget extends StatelessWidget {
   const CustomHeightSpaceWidget(this.height, {super.key});
 
   @override
-  Widget build(BuildContext context) => SizedBox(height: height.h ?? 0.h);
+  Widget build(BuildContext context) => SizedBox(height: height.h);
 }
 
 class CustomWidthSpaceWidget extends StatelessWidget {
@@ -14,5 +14,5 @@ class CustomWidthSpaceWidget extends StatelessWidget {
   const CustomWidthSpaceWidget(this.width,{super.key});
 
   @override
-  Widget build(BuildContext context) => SizedBox(width: width.w ?? 0.w);
+  Widget build(BuildContext context) => SizedBox(width: width.w);
 }

@@ -6,9 +6,6 @@ class CustomAppBarWidget extends StatelessWidget {
   void Function() onBackPressed;
   bool? showBackButton;
   String title;
-  // double topAppBarHeight;
-  // double bottomAppBarHeight;
-  //List<Widget?> children;
   Widget body;
 
   CustomAppBarWidget(
@@ -16,9 +13,6 @@ class CustomAppBarWidget extends StatelessWidget {
     super.key,
     required this.onBackPressed,
     required this.title,
-    // required this.topAppBarHeight,
-    // required this.bottomAppBarHeight,
-    //required this.children,
     required this.body,
   });
 
@@ -41,25 +35,3 @@ class CustomAppBarWidget extends StatelessWidget {
     );
   }
 }
-
-// return Scaffold(
-// body: Column(
-// children: [
-// CustomHeightSpaceWidget(topAppBarHeight.h),
-// Row(
-// children: [
-// displayBackButton
-// ? IconButton(
-// onPressed: onBackPressed,
-// icon: const Icon(Icons.arrow_back_ios),
-// )
-//     : const CustomWidthSpaceWidget(16),
-// // const CustomWidthSpaceWidget(8),
-// Text(title, style: AppTextStyles.black20MediumInter),
-// ],
-// ),
-// CustomHeightSpaceWidget(bottomAppBarHeight.h),
-// ...children.whereType<Widget>(),
-// ],
-// ),
-// );

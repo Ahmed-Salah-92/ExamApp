@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:exam_app/features/auth/login/api/api_client/auth_login_api_client.dart';
+import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
+import 'package:exam_app/features/auth/login/api/model/response/auth_login_api_response.dart';
+import 'package:exam_app/features/auth/login/data/datasource/remote/auth_login_remote_datasource_contract.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../data/datasource/remote/auth_login_remote_datasource_contract.dart';
-import '../../../data/model/request/auth_login_request_dto.dart';
-import '../../../data/model/response/auth_login_response.dart';
-import '../../api_client/auth_login_api_client.dart';
 
 @Injectable(as: AuthLoginRemoteDatasourceContract)
 class AuthLoginRemoteDatasourceImpl
@@ -14,22 +14,22 @@ class AuthLoginRemoteDatasourceImpl
   AuthLoginRemoteDatasourceImpl(this.loginApiClient);
 
   @override
-  Future<AuthLoginResponse> login(AuthLoginRequestDto loginRequestDto) async {
+  Future<AuthLoginApiResponse> login(AuthLoginAPiRequest loginRequest) async {
     try {
       print('=== STARTING LOGIN API CALL ===');
-      print('Email: ${loginRequestDto.email}');
+      print('Email: ${loginRequest.email}');
       print(
-        'Password: ${loginRequestDto.password.replaceAll(RegExp(r'.'), '*')}',
+        'Password: ${loginRequest.password.replaceAll(RegExp(r'.'), '*')}',
       );
-      print('Request JSON: ${loginRequestDto.toJson()}');
+      print('Request JSON: ${loginRequest.toJson()}');
 
-      final response = await loginApiClient.login(loginRequestDto);
+       final response = await loginApiClient.login(loginRequest);
 
       print('=== API RESPONSE SUCCESS ===');
       print('Response: $response');
       print('Message: ${response.message}');
       print('Token: ${response.token}');
-      print('User: ${response.user}');
+      print('User: ${response.userDto}');
 
       return response;
     } on DioException catch (dioError) {
@@ -49,4 +49,5 @@ class AuthLoginRemoteDatasourceImpl
       throw Exception('Failed to login: $e');
     }
   }
+
 }

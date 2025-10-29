@@ -1,20 +1,21 @@
+import 'package:exam_app/config/di/di.dart';
+import 'package:exam_app/core/validation/auth_validation.dart';
 import 'package:exam_app/core/values/app_strings.dart';
-import 'package:exam_app/core/values/app_text_styles.dart';
-import 'package:exam_app/core/widgets/custom_app_bar_widget.dart';
-import 'package:exam_app/core/widgets/custom_spacer_widget.dart';
+import 'package:exam_app/core/widgets/auth/custom_elevated_button_widget.dart';
+import 'package:exam_app/core/widgets/auth/custom_rich_text_widget.dart';
+import 'package:exam_app/core/widgets/auth/custom_text_field_widget.dart';
+import 'package:exam_app/features/auth/login/presentation/view_model/auth_login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../config/di/di.dart';
-import '../../../../../core/validation/auth_validation.dart';
-import '../../../../../core/widgets/auth/custom_elevated_button_widget.dart';
-import '../../../../../core/widgets/auth/custom_rich_text_widget.dart';
-import '../../../../../core/widgets/auth/custom_text_field_widget.dart';
-import '../login_viewmodel/login_view_model.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+import '../../../../../../core/values/app_text_styles.dart';
+import '../../../../../../core/widgets/custom_app_bar_widget.dart';
+import '../../../../../../core/widgets/custom_spacer_widget.dart';
 
-  final LoginViewModel loginViewModel = getIt<LoginViewModel>();
+class AuthLoginScreen extends StatelessWidget {
+  AuthLoginScreen({super.key});
+
+  final AuthLoginViewModel vm = getIt<AuthLoginViewModel>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class LoginScreen extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
         child: Form(
-          key: loginViewModel.formKey,
+          key: vm.formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                 labelText: AppStrings.emailLabel,
                 hintText: AppStrings.emailHint,
                 validator: AuthValidation.emailValidation,
-                controller: loginViewModel.emailController,
+                controller: vm.emailController,
               ),
               const CustomHeightSpaceWidget(24),
               CustomEditTextFieldWidget(
@@ -42,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                 hintText: AppStrings.passwordHint,
                 isPasswordField: true,
                 validator: AuthValidation.passwordValidation,
-                controller: loginViewModel.passwordController,
+                controller: vm.passwordController,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +78,7 @@ class LoginScreen extends StatelessWidget {
               const CustomHeightSpaceWidget(48),
               CustomElevatedButtonWidget(
                 onPressed: () {
-                  loginViewModel.login();
+                  vm.login();
                 },
                 buttonText: AppStrings.login,
               ),

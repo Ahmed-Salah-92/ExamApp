@@ -1,28 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_login_response.dart';
+part of 'user_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AuthLoginResponse _$AuthLoginResponseFromJson(Map<String, dynamic> json) =>
-    AuthLoginResponse(
-      message: json['message'] as String?,
-      token: json['token'] as String?,
-      user: json['user'] == null
-          ? null
-          : User.fromJson(json['user'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$AuthLoginResponseToJson(AuthLoginResponse instance) =>
-    <String, dynamic>{
-      'message': instance.message,
-      'token': instance.token,
-      'user': instance.user,
-    };
-
-User _$UserFromJson(Map<String, dynamic> json) => User(
+UserDto _$UserDtoFromJson(Map<String, dynamic> json) => UserDto(
   id: json['_id'] as String?,
   username: json['username'] as String?,
   firstName: json['firstName'] as String?,
@@ -36,7 +20,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       : DateTime.parse(json['createdAt'] as String),
 );
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+Map<String, dynamic> _$UserDtoToJson(UserDto instance) => <String, dynamic>{
   '_id': instance.id,
   'username': instance.username,
   'firstName': instance.firstName,

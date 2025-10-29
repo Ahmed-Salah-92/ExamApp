@@ -1,7 +1,7 @@
+import 'package:exam_app/features/auth/login/presentation/views/screen/auth_login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'config/di/di.dart';
-import 'features/auth/login/presentation/login_views/login_screen.dart';
 
 void main() {
   configureDependencies();
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           ),
-          home: LoginScreen(),
+          home: AuthLoginScreen(),
         );
       },
     );

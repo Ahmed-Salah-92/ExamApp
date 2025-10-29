@@ -1,26 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'auth_login_response.g.dart';
-
+part 'user_dto.g.dart';
 @JsonSerializable()
-class AuthLoginResponse {
-  @JsonKey(name: "message")
-  String? message;
-  @JsonKey(name: "token")
-  String? token;
-  @JsonKey(name: "user")
-  User? user;
-
-  AuthLoginResponse({this.message, this.token, this.user});
-
-  factory AuthLoginResponse.fromJson(Map<String, dynamic> json) =>
-      _$AuthLoginResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$AuthLoginResponseToJson(this);
-}
-
-@JsonSerializable()
-class User {
+class UserDto {
   @JsonKey(name: "_id")
   String? id;
   @JsonKey(name: "username")
@@ -40,7 +22,7 @@ class User {
   @JsonKey(name: "createdAt")
   DateTime? createdAt;
 
-  User({
+  UserDto({
     this.id,
     this.username,
     this.firstName,
@@ -52,7 +34,7 @@ class User {
     this.createdAt,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
 
-  Map<String, dynamic> toJson() => _$UserToJson(this);
+  Map<String, dynamic> toJson() => _$UserDtoToJson(this);
 }

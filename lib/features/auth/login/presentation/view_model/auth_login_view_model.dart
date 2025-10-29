@@ -1,13 +1,12 @@
-import 'package:flutter/widgets.dart';
+import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
+import 'package:exam_app/features/auth/login/domain/usecase/auth_login_usecase.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../data/model/request/auth_login_request_dto.dart';
-import '../../domain/usecase/auth_login_usecase.dart';
-
 @injectable
-class LoginViewModel {
+class AuthLoginViewModel {
   final AuthLoginUseCase authLoginUseCase;
-  LoginViewModel(this.authLoginUseCase);
+  AuthLoginViewModel(this.authLoginUseCase);
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -17,7 +16,7 @@ class LoginViewModel {
     try {
       if (formKey.currentState!.validate()) {
         var result = await authLoginUseCase.call(
-          AuthLoginRequestDto(
+          AuthLoginAPiRequest(
             email: emailController.text,
             password: passwordController.text,
           ),
@@ -25,7 +24,7 @@ class LoginViewModel {
         );
         print('>>>>>Login Result Message: ${result.message}');
         print('>>>>>Login Result Token: ${result.token}');
-        print('>>>>>Login Result User: ${result.user.toString()}');
+        print('>>>>>Login Result User: ${result.userDto.toString()}');
         return result;
       }
     } catch (e) {
