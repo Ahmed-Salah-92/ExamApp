@@ -1,4 +1,5 @@
 class AppRoutesStrings {
+
   static const String login = '/login';
   static const String signup = '/signup';
   static const String forgetPassword = '/forget_password';

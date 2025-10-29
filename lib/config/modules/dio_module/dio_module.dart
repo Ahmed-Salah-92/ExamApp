@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../core/values/app_endpoints_strings.dart';
+import '../../../core/values/app_endpoints.dart';
+
 
 
 @module
@@ -10,7 +11,7 @@ abstract class DioModule {
   Dio get dio => Dio(
     BaseOptions(
       baseUrl: AppEndpoints.baseUrl,
-     // connectTimeout: Duration(seconds: 10),
+      // connectTimeout: Duration(seconds: 10),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
