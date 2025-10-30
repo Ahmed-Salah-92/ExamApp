@@ -6,11 +6,13 @@ import '../../api/model/response/auth_api_response.dart';
 import '../repo/auth_login_repo_contract.dart';
 
 @LazySingleton()
-class AuthLoginUseCase {
+class RememberMeUseCase {
   final AuthLoginRepoContract authLoginRepo;
 
-  AuthLoginUseCase(this.authLoginRepo);
+  const RememberMeUseCase(this.authLoginRepo);
 
-  Future<BaseResponse<AuthApiResponse>> call(AuthLoginAPiRequest loginApiRequest)
-  => authLoginRepo.loginRequest(loginApiRequest);
+  Future<BaseResponse<AuthApiResponse>> call(
+    AuthLoginAPiRequest loginApiRequest,
+    bool isCheckedRememberMe,
+  ) => authLoginRepo.rememberMe(loginApiRequest, isCheckedRememberMe);
 }

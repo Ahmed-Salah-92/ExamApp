@@ -1,10 +1,12 @@
+import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:exam_app/features/auth/login/api/api_client/auth_login_api_client.dart';
-import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
-import 'package:exam_app/features/auth/login/api/model/response/auth_login_api_response.dart';
-import 'package:exam_app/features/auth/login/data/datasource/remote/auth_login_remote_datasource_contract.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../../config/base_response/base_response.dart';
+import '../../../data/datasource/remote/auth_login_remote_datasource_contract.dart';
+import '../../api_client/auth_login_api_client.dart';
+import '../../model/request/auth_login_api_request.dart';
+import '../../model/response/auth_api_response.dart';
 
 @Injectable(as: AuthLoginRemoteDatasourceContract)
 class AuthLoginRemoteDatasourceImpl
@@ -14,40 +16,37 @@ class AuthLoginRemoteDatasourceImpl
   AuthLoginRemoteDatasourceImpl(this.loginApiClient);
 
   @override
-  Future<AuthLoginApiResponse> login(AuthLoginAPiRequest loginRequest) async {
+  Future<BaseResponse<AuthApiResponse>> login(
+    AuthLoginAPiRequest loginRequest,
+  ) async {
+    final response = await loginApiClient.login(loginRequest);
     try {
-      print('=== STARTING LOGIN API CALL ===');
-      print('Email: ${loginRequest.email}');
-      print(
-        'Password: ${loginRequest.password.replaceAll(RegExp(r'.'), '*')}',
-      );
-      print('Request JSON: ${loginRequest.toJson()}');
+      log('=== STARTING LOGIN API CALL ===');
+      log('Email: ${loginRequest.email}');
+      log('Password: ${loginRequest.password.replaceAll(RegExp(r'.'), '*')}');
+      log('Request JSON: ${loginRequest.toJson()}');
 
-       final response = await loginApiClient.login(loginRequest);
+      log('=== API RESPONSE SUCCESS ===');
+      log('Response: $response');
+      log('Message: ${response.message}');
+      log('Token: ${response.token}');
+      log('User: ${response.user}');
 
-      print('=== API RESPONSE SUCCESS ===');
-      print('Response: $response');
-      print('Message: ${response.message}');
-      print('Token: ${response.token}');
-      print('User: ${response.userDto}');
-
-      return response;
+      return SuccessResponse(data: response);
     } on DioException catch (dioError) {
-      print('=== DIO EXCEPTION CAUGHT ===');
-      print('Error Type: ${dioError.type}');
-      print('Status Code: ${dioError.response?.statusCode}');
-      print('Response Data: ${dioError.response?.data}');
-      print('Request URL: ${dioError.requestOptions.uri}');
-      print('Request Method: ${dioError.requestOptions.method}');
-      print('Sent Data: ${dioError.requestOptions.data}');
-      print('Sent Headers: ${dioError.requestOptions.headers}');
-
-      throw Exception('Failed to login: $dioError');
+      log('=== DIO EXCEPTION CAUGHT ===');
+      log('Error Type: ${dioError.type}');
+      log('Status Code: ${dioError.response?.statusCode}');
+      log('Response Data: ${dioError.response?.data}');
+      log('Request URL: ${dioError.requestOptions.uri}');
+      log('Request Method: ${dioError.requestOptions.method}');
+      log('Sent Data: ${dioError.requestOptions.data}');
+      log('Sent Headers: ${dioError.requestOptions.headers}');
+      return ErrorResponse(error: dioError, statusCode: dioError.response?.statusCode);
     } catch (e) {
-      print('=== GENERAL EXCEPTION ===');
-      print('Error: $e');
-      throw Exception('Failed to login: $e');
+      log('=== GENERAL EXCEPTION ===');
+      log('Error: $e');
+      return ErrorResponse(error: Exception(response.message), statusCode: response.code);
     }
   }
-
 }
