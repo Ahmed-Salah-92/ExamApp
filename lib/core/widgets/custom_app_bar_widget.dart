@@ -3,12 +3,12 @@ import 'package:exam_app/core/widgets/custom_spacer_widget.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBarWidget extends StatelessWidget {
-  void Function() onBackPressed;
-  bool? showBackButton;
-  String title;
-  Widget body;
+ final void Function() onBackPressed;
+ final bool? showBackButton;
+ final String title;
+ final Widget body;
 
-  CustomAppBarWidget(
+  const CustomAppBarWidget(
     this.showBackButton, {
     super.key,
     required this.onBackPressed,

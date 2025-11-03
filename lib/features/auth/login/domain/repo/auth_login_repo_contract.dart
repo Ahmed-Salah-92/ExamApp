@@ -1,9 +1,10 @@
-import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
-import 'package:exam_app/features/auth/login/api/model/response/auth_login_api_response.dart';
+import '../../../../../config/base_response/base_response.dart';
+import '../../api/model/request/auth_login_api_request.dart';
+import '../model/login_response_model.dart';
 
 abstract class AuthLoginRepoContract {
-  Future<AuthLoginApiResponse> login(
-      AuthLoginAPiRequest loginApiRequest, {
-        required bool isCheckedRememberMe,
-      });
+  Future<BaseResponse<LoginResponseModel>> login(
+    AuthLoginApiRequest loginApiRequest, {
+    bool isCheckedRememberMe,
+  });
 }

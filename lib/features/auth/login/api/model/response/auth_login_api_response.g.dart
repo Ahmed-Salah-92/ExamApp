@@ -1,4 +1,4 @@
- // GENERATED CODE - DO NOT MODIFY BY HAND
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'auth_login_api_response.dart';
 

@@ -26,8 +26,6 @@ import '../../features/auth/login/domain/repo/auth_login_repo_contract.dart'
     as _i568;
 import '../../features/auth/login/domain/usecase/auth_login_usecase.dart'
     as _i122;
-import '../../features/auth/login/domain/usecase/remember_me_usecase.dart'
-    as _i2;
 import '../../features/auth/login/presentation/view_model/auth_login_view_model.dart'
     as _i5;
 import '../modules/dio_module/dio_module.dart' as _i624;
@@ -66,11 +64,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i122.AuthLoginUseCase>(
       () => _i122.AuthLoginUseCase(gh<_i568.AuthLoginRepoContract>()),
     );
-    gh.lazySingleton<_i2.RememberMeUseCase>(
-      () => _i2.RememberMeUseCase(gh<_i568.AuthLoginRepoContract>()),
-    );
     gh.factory<_i5.AuthLoginViewModel>(
-      () => _i5.AuthLoginViewModel(gh<_i122.AuthLoginUseCase>()),
+      () => _i5.AuthLoginViewModel(
+        gh<_i122.AuthLoginUseCase>(),
+        gh<_i558.FlutterSecureStorage>(),
+      ),
     );
     return this;
   }

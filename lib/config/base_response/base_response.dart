@@ -7,12 +7,11 @@ class SuccessResponse<T> extends BaseResponse<T> {
 }
 
 class ErrorResponse<T> extends BaseResponse<T> {
-  final Exception error;
-  dynamic statusCode;
-  String errorMessage = "something went wrong";
+   final Exception error;
+   String errorException = "";
+  String? errorMessage = "something went wrong";
 
-  ErrorResponse({required this.error, statusCode}) {
-    errorMessage = error.toString();
-    statusCode = statusCode ?? 100;
+  ErrorResponse({ required this.error, this.errorMessage}){
+    errorException = error.toString();
   }
 }

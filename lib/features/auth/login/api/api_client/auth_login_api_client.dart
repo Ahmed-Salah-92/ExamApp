@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:exam_app/features/auth/login/api/model/response/auth_login_api_response.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../../../../core/values/app_endpoints_strings.dart';
 import '../model/request/auth_login_api_request.dart';
-import '../model/response/auth_api_response.dart';
 
 part 'auth_login_api_client.g.dart';
 
@@ -14,7 +14,6 @@ abstract class AuthLoginApiClient {
   @factoryMethod
   factory AuthLoginApiClient(Dio dio) = _AuthLoginApiClient;
 
-
   @POST(AppEndpoints.login)
-  Future<AuthApiResponse> login(@Body() AuthLoginAPiRequest loginApiRequest);
+  Future<AuthLoginApiResponse> login(@Body() AuthLoginApiRequest loginApiRequest);
 }
