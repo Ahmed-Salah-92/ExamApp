@@ -1,3 +1,4 @@
+import 'package:exam_app/features/auth/login/domain/model/user_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user_dto.g.dart';
@@ -39,6 +40,14 @@ class UserDto {
       _$UserDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserDtoToJson(this);
+
+  UserModel toDomain() => UserModel(
+    username: username ?? "",
+    firstName: firstName ?? "",
+    lastName: lastName ?? "",
+    email: email ?? "",
+    phone: phone ?? "",
+  );
 
   // UserDto toDomain() => UserDto(
   //   id: id,

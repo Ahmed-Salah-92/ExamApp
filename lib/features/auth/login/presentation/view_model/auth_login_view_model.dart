@@ -23,15 +23,14 @@ class AuthLoginViewModel extends Cubit<AuthLoginState> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final _isCheckedRememberMe = false;
-
-  bool get isCheckedRM => _isCheckedRememberMe;
+  bool _isCheckedRememberMe = false;
 
   void doIntent(AuthLoginEvent event) {
     switch (event) {
       case LoginEvent():
         _login();
       case RememberMeEvent():
+        _isCheckedRememberMe = !_isCheckedRememberMe;
         _printToken();
       case SingUpEvent():
         _navigateToRegisterScreen();
@@ -100,6 +99,8 @@ class AuthLoginViewModel extends Cubit<AuthLoginState> {
 
   static final String _tokenKey = "token_key";
 
+
+
   Future _setTokens({required String tokenValue}) async {
     await _securedPrefs.write(key: _tokenKey, value: tokenValue);
   }
@@ -134,29 +135,22 @@ class AuthLoginViewModel extends Cubit<AuthLoginState> {
     log('>>>>>UnexpectedError<<<<<<');
     log('>>>>>Exception: $e');
   }
+  BuildContext? get context => null;
 
-  get context => BuildContext;
 
-  _navigateToHomeScreen() async {
-    String userToken = await _getTokens();
-    Navigator.pushNamed(
-      context,
-      AppRoutesStrings.home,
-      arguments: LoginResponseModel(token: userToken),
-    );
-  }
+  _navigateToHomeScreen()  =>
+      Navigator.pushNamed(context!, AppRoutesStrings.home);
 
   _navigateToForgetPasswordScreen() =>
-      Navigator.pushNamed(context, AppRoutesStrings.forgetPassword);
+      Navigator.pushNamed(context!, AppRoutesStrings.forgetPassword);
 
   _navigateToRegisterScreen() =>
-      Navigator.pushNamed(context, AppRoutesStrings.signup);
+      Navigator.pushNamed(context!, AppRoutesStrings.signup);
 
   @override
   Future<void> close() {
     emailController.dispose();
     passwordController.dispose();
-    context.dispose();
     return super.close();
   }
 }

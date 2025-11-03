@@ -28,19 +28,7 @@ class AuthLoginApiResponse {
     message: message ?? '',
     // code: code ?? 200,
     token: token ?? '',
-    userData:
-        userDto ??
-        UserDto(
-          id: '',
-          username: '',
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          role: '',
-          isVerified: false,
-          createdAt: DateTime.now(),
-        ),
+    userData: userDto?.toDomain()
   );
 
   /// Helper method to format DateTime to local (not used currently)
