@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:exam_app/config/base_state/base_state.dart';
-import 'package:exam_app/core/values/app_routes_strings.dart';
 import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
 import 'package:exam_app/features/auth/login/domain/usecase/auth_login_usecase.dart';
 import 'package:exam_app/features/auth/login/presentation/view_model/auth_login_state.dart';
@@ -33,16 +32,14 @@ class AuthLoginViewModel extends Cubit<AuthLoginState> {
         _isCheckedRememberMe = !_isCheckedRememberMe;
         _printToken();
       case SingUpEvent():
-        _navigateToRegisterScreen();
+        emit(state.copyWith(navigationAction: NavigationAction.signup));
       case ForgetPasswordEvent():
-        _navigateToForgetPasswordScreen();
+        emit(state.copyWith(navigationAction: NavigationAction.forgetPassword));
     }
   }
 
   bool _isValidated() {
-    if (formKey.currentState!.validate()) {
-      return true;
-    }
+    if (formKey.currentState!.validate()) return true;
     return false;
   }
 
@@ -55,23 +52,18 @@ class AuthLoginViewModel extends Cubit<AuthLoginState> {
           AuthLoginApiRequest(email: emailParam, password: passwordParam),
           isCheckedRememberMe: isCheckedRememberMe,
         );
-        emit(
-          state.copyWith(
-            loginResponseModel: BaseState<LoginResponseModel>(isLoading: true),
-          ),
-        );
         switch (result) {
           case SuccessResponse<LoginResponseModel>():
             emit(
               state.copyWith(
                 loginResponseModel: BaseState<LoginResponseModel>(
-                  isLoading: false,
                   data: result.data,
                 ),
+                navigationAction: NavigationAction.home,
               ),
             );
             final dataModel = result.data;
-            const String emptyToken = "Empty Token";
+            const String emptyToken = "Empty_Token";
             // must be handle isCheckedRememberMe Action
             if (isCheckedRememberMe == true) {
               await _setTokens(tokenValue: dataModel.token ?? emptyToken);
@@ -82,7 +74,6 @@ class AuthLoginViewModel extends Cubit<AuthLoginState> {
             emit(
               state.copyWith(
                 loginResponseModel: BaseState<LoginResponseModel>(
-                  isLoading: false,
                   errorMessage: result.errorMessage,
                 ),
               ),
@@ -135,18 +126,6 @@ class AuthLoginViewModel extends Cubit<AuthLoginState> {
     log('>>>>>UnexpectedError<<<<<<');
     log('>>>>>Exception: $e');
   }
-  BuildContext? get context => null;
-
-
-  _navigateToHomeScreen()  =>
-      Navigator.pushNamed(context!, AppRoutesStrings.home);
-
-  _navigateToForgetPasswordScreen() =>
-      Navigator.pushNamed(context!, AppRoutesStrings.forgetPassword);
-
-  _navigateToRegisterScreen() =>
-      Navigator.pushNamed(context!, AppRoutesStrings.signup);
-
   @override
   Future<void> close() {
     emailController.dispose();

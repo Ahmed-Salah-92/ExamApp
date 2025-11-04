@@ -1,4 +1,5 @@
 import 'package:exam_app/config/di/di.dart';
+import 'package:exam_app/core/values/app_routes_strings.dart';
 import 'package:exam_app/core/values/app_strings.dart';
 import 'package:exam_app/features/auth/login/presentation/view_model/auth_login_event.dart';
 import 'package:exam_app/features/auth/login/presentation/view_model/auth_login_state.dart';
@@ -24,9 +25,9 @@ class AuthLoginScreen extends StatelessWidget {
       showBackButton: false,
       title: AppStrings.login,
       body: BlocProvider<AuthLoginViewModel>(
-        create: (_) => vm..doIntent(LoginEvent()),
+        create: (context) => vm..doIntent(LoginEvent()),
         child: BlocListener<AuthLoginViewModel, AuthLoginState>(
-          listener: (_, state) {
+          listener: (context, state) {
             var loginResponseState = state.loginResponseModel;
             if (loginResponseState?.data?.message != null) {
               showCustomSnackBar(
@@ -41,6 +42,20 @@ class AuthLoginScreen extends StatelessWidget {
                 Colors.green,
               );
             }
+            switch (state.navigationAction) {
+              case NavigationAction.home:
+                Navigator.pushNamed(context, AppRoutesStrings.home);
+                break;
+              case NavigationAction.forgetPassword:
+                Navigator.pushNamed(context, AppRoutesStrings.forgetPassword);
+                break;
+              case NavigationAction.signup:
+                Navigator.pushNamed(context, AppRoutesStrings.signup);
+                break;
+              default:
+                break;
+            }
+            context.read<AuthLoginViewModel>().emit(state.copyWith(navigationAction: NavigationAction.none));
           },
           child: AuthLoginScreenBodyWidget(loginViewModel: vm),
         ),
