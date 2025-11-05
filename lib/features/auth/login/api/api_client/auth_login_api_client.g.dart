@@ -21,7 +21,7 @@ class _AuthLoginApiClient implements AuthLoginApiClient {
 
   @override
   Future<AuthLoginApiResponse> login(
-    AuthLoginAPiRequest loginApiRequest,
+    AuthLoginApiRequest loginApiRequest,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

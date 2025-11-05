@@ -1,7 +1,9 @@
-import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
-import 'package:exam_app/features/auth/login/api/model/response/auth_login_api_response.dart';
-import 'package:exam_app/features/auth/login/domain/repo/auth_login_repo_contract.dart';
+import 'package:exam_app/features/auth/login/domain/model/login_response_model.dart';
 import 'package:injectable/injectable.dart';
+import '../../../../../config/base_response/base_response.dart';
+import '../../api/model/request/auth_login_api_request.dart';
+import '../../api/model/response/auth_login_api_response.dart';
+import '../repo/auth_login_repo_contract.dart';
 
 @LazySingleton()
 class AuthLoginUseCase {
@@ -9,13 +11,11 @@ class AuthLoginUseCase {
 
   AuthLoginUseCase(this.authLoginRepo);
 
-  Future<AuthLoginApiResponse> call(
-    AuthLoginAPiRequest loginApiRequest, {
-    required bool isCheckedRememberMe,
-  }) {
-    return authLoginRepo.login(
-      loginApiRequest,
-      isCheckedRememberMe: isCheckedRememberMe,
-    );
-  }
+  Future<BaseResponse<LoginResponseModel>> call(
+    AuthLoginApiRequest loginApiRequest, {
+    bool isCheckedRememberMe = false,
+  }) => authLoginRepo.login(
+    loginApiRequest,
+    isCheckedRememberMe: isCheckedRememberMe,
+  );
 }

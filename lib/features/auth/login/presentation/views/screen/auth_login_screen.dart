@@ -1,97 +1,63 @@
 import 'package:exam_app/config/di/di.dart';
-import 'package:exam_app/core/validation/auth_validation.dart';
+import 'package:exam_app/core/values/app_routes_strings.dart';
 import 'package:exam_app/core/values/app_strings.dart';
-import 'package:exam_app/core/widgets/auth/custom_elevated_button_widget.dart';
-import 'package:exam_app/core/widgets/auth/custom_rich_text_widget.dart';
-import 'package:exam_app/core/widgets/auth/custom_text_field_widget.dart';
+import 'package:exam_app/features/auth/login/presentation/view_model/auth_login_event.dart';
+import 'package:exam_app/features/auth/login/presentation/view_model/auth_login_state.dart';
 import 'package:exam_app/features/auth/login/presentation/view_model/auth_login_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../../../core/values/app_text_styles.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../core/widgets/custom_app_bar_widget.dart';
-import '../../../../../../core/widgets/custom_spacer_widget.dart';
+import '../widgets/auth_login_screen_body_widget.dart';
 
 class AuthLoginScreen extends StatelessWidget {
   AuthLoginScreen({super.key});
 
   final AuthLoginViewModel vm = getIt<AuthLoginViewModel>();
 
+  void showCustomSnackBar(BuildContext ctx, String msg, Color bkgColor) =>
+      ScaffoldMessenger.of(
+        ctx,
+      ).showSnackBar(SnackBar(content: Text(msg), backgroundColor: bkgColor));
+
   @override
   Widget build(BuildContext context) {
     return CustomAppBarWidget(
-      true,
-      onBackPressed: () {},
+      showBackButton: false,
       title: AppStrings.login,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-        child: Form(
-          key: vm.formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomEditTextFieldWidget(
-                labelText: AppStrings.emailLabel,
-                hintText: AppStrings.emailHint,
-                validator: AuthValidation.emailValidation,
-                controller: vm.emailController,
-              ),
-              const CustomHeightSpaceWidget(24),
-              CustomEditTextFieldWidget(
-                labelText: AppStrings.passwordLabel,
-                hintText: AppStrings.passwordHint,
-                isPasswordField: true,
-                validator: AuthValidation.passwordValidation,
-                controller: vm.passwordController,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: false, //loginViewModel.isRememberMe,
-                        onChanged: (bool? value) {
-                          //loginViewModel.setRememberMe(value ?? false);
-                        },
-                      ),
-                      Text(
-                        AppStrings.rememberMe,
-                        style: AppTextStyles.black13RegularInter,
-                      ),
-                    ],
-                  ),
-                  InkWell(
-                    onTap: () {
-                      // Handle forget password action
-                    },
-                    child: Text(
-                      AppStrings.forgetPassword,
-                      style: AppTextStyles.black12RegularInter.copyWith(
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const CustomHeightSpaceWidget(48),
-              CustomElevatedButtonWidget(
-                onPressed: () {
-                  vm.login();
-                },
-                buttonText: AppStrings.login,
-              ),
-              const CustomHeightSpaceWidget(16),
-              CustomRichTextWidget(
-                onTap: () {
-                  // Handle navigation to registration screen
-                },
-                firstText: AppStrings.dontHaveAccount,
-                secondText: AppStrings.signUp,
-              ),
-            ],
-          ),
+      body: BlocProvider<AuthLoginViewModel>(
+        create: (context) => vm..doIntent(LoginEvent()),
+        child: BlocListener<AuthLoginViewModel, AuthLoginState>(
+          listener: (context, state) {
+            var loginResponseState = state.loginResponseModel;
+            if (loginResponseState?.data?.message != null) {
+              showCustomSnackBar(
+                context,
+                "${loginResponseState?.data?.message}",
+                Colors.red,
+              );
+            } else if (loginResponseState?.data?.token != null) {
+              showCustomSnackBar(
+                context,
+                "Login successful! Token: ${loginResponseState?.data!.token}",
+                Colors.green,
+              );
+            }
+            switch (state.navigationAction) {
+              case NavigationAction.home:
+                Navigator.pushNamed(context, AppRoutesStrings.home);
+                break;
+              case NavigationAction.forgetPassword:
+                Navigator.pushNamed(context, AppRoutesStrings.forgetPassword);
+                break;
+              case NavigationAction.signup:
+                Navigator.pushNamed(context, AppRoutesStrings.signup);
+                break;
+              default:
+                break;
+            }
+            context.read<AuthLoginViewModel>().emit(state.copyWith(navigationAction: NavigationAction.none));
+          },
+          child: AuthLoginScreenBodyWidget(loginViewModel: vm),
         ),
       ),
     );

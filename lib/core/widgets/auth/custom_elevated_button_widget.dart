@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../values/app_colors.dart';
 
-
 class CustomElevatedButtonWidget extends StatelessWidget {
   final String? buttonText;
   final Color? buttonColor;
@@ -14,6 +13,7 @@ class CustomElevatedButtonWidget extends StatelessWidget {
   final double? height;
   final double? borderRadius;
   final VoidCallback? onPressed;
+  final bool isEnable;
 
   const CustomElevatedButtonWidget({
     super.key,
@@ -25,12 +25,14 @@ class CustomElevatedButtonWidget extends StatelessWidget {
     this.height,
     this.onPressed,
     this.borderRadius,
+    this.isEnable = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      autofocus: isEnable,
       style: ElevatedButton.styleFrom(
         backgroundColor: buttonColor ?? AppColors.blue,
         fixedSize: Size(width ?? 343.w, height ?? 48.h),
@@ -38,10 +40,7 @@ class CustomElevatedButtonWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius ?? 24.r),
         ),
       ),
-      child: Text(
-        buttonText ?? "",
-        style: AppTextStyles.white16MediumRoboto,
-      ),
+      child: Text(buttonText ?? "", style: AppTextStyles.white16MediumRoboto),
     );
   }
 }

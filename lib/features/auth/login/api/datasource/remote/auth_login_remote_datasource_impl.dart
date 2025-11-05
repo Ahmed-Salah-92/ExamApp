@@ -1,53 +1,90 @@
+import 'dart:developer';
 import 'package:dio/dio.dart';
-import 'package:exam_app/features/auth/login/api/api_client/auth_login_api_client.dart';
-import 'package:exam_app/features/auth/login/api/model/request/auth_login_api_request.dart';
-import 'package:exam_app/features/auth/login/api/model/response/auth_login_api_response.dart';
-import 'package:exam_app/features/auth/login/data/datasource/remote/auth_login_remote_datasource_contract.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../../../../config/base_response/base_response.dart';
+import '../../../data/datasource/remote/auth_login_remote_datasource_contract.dart';
+import '../../api_client/auth_login_api_client.dart';
+import '../../model/request/auth_login_api_request.dart';
+import '../../model/response/auth_login_api_response.dart';
 
 @Injectable(as: AuthLoginRemoteDatasourceContract)
-class AuthLoginRemoteDatasourceImpl
-    implements AuthLoginRemoteDatasourceContract {
-  final AuthLoginApiClient loginApiClient;
+class AuthLoginRemoteDatasourceImpl implements AuthLoginRemoteDatasourceContract {
+  final AuthLoginApiClient _loginApiClient;
 
-  AuthLoginRemoteDatasourceImpl(this.loginApiClient);
+  AuthLoginRemoteDatasourceImpl(this._loginApiClient);
+
+  // BaseResponse<AuthLoginApiResponse> _responseFromResult(
+  //    response,
+  // ) {
+  //   if (response.message == "success") {
+  //     return SuccessResponse(data: response);
+  //   } else {
+  //     return ErrorResponse(
+  //       error: Exception(response.message),
+  //       code: response.code ?? 0,
+  //     );
+  //   }
+  // }
 
   @override
-  Future<AuthLoginApiResponse> login(AuthLoginAPiRequest loginRequest) async {
+  Future<BaseResponse<AuthLoginApiResponse>> login(AuthLoginApiRequest loginRequest) async {
     try {
-      print('=== STARTING LOGIN API CALL ===');
-      print('Email: ${loginRequest.email}');
-      print(
-        'Password: ${loginRequest.password.replaceAll(RegExp(r'.'), '*')}',
-      );
-      print('Request JSON: ${loginRequest.toJson()}');
+      log('=== STARTING LOGIN API CALL ===');
+      log('Email: ${loginRequest.email}');
+      log('password: ${loginRequest.password}');
 
-       final response = await loginApiClient.login(loginRequest);
+      AuthLoginApiResponse response = await _loginApiClient.login(loginRequest);
 
-      print('=== API RESPONSE SUCCESS ===');
-      print('Response: $response');
-      print('Message: ${response.message}');
-      print('Token: ${response.token}');
-      print('User: ${response.userDto}');
+      log('=== API RESPONSE SUCCESS ===');
+      log('Response Message: ${response.message ?? "No message"}');
+      log('Token: ${response.token != null ? "Token received" : "No token"}');
 
-      return response;
+      // Check if the response indicates success
+      if (response.message?.toLowerCase() == "success" && response.token != null) {
+        return SuccessResponse<AuthLoginApiResponse>(data: response);
+      } else {
+        return ErrorResponse<AuthLoginApiResponse>(
+          errorMessage: response.message ?? "Login failed", error: Exception(response.message.toString()),
+        );
+      }
     } on DioException catch (dioError) {
-      print('=== DIO EXCEPTION CAUGHT ===');
-      print('Error Type: ${dioError.type}');
-      print('Status Code: ${dioError.response?.statusCode}');
-      print('Response Data: ${dioError.response?.data}');
-      print('Request URL: ${dioError.requestOptions.uri}');
-      print('Request Method: ${dioError.requestOptions.method}');
-      print('Sent Data: ${dioError.requestOptions.data}');
-      print('Sent Headers: ${dioError.requestOptions.headers}');
+      log('=== DIO EXCEPTION CAUGHT ===');
+      log('Error Type: ${dioError.type}');
+      log('Status Code: ${dioError.response?.statusCode}');
+      log('Response Data: ${dioError.response?.data}');
 
-      throw Exception('Failed to login: $dioError');
+      // Handle specific error cases
+      String errorMessage = "Something went wrong";
+
+      if (dioError.response != null) {
+        // Extract error message from response
+        final responseData = dioError.response?.data;
+        if (responseData is Map<String, dynamic>) {
+          errorMessage = responseData['message'] ?? responseData['error'] ?? errorMessage;
+        } else if (responseData is String) {
+          errorMessage = responseData;
+        }
+      } else if (dioError.type == DioExceptionType.connectionTimeout ||
+                 dioError.type == DioExceptionType.receiveTimeout) {
+        errorMessage = "Connection timeout. Please check your internet connection.";
+      } else if (dioError.type == DioExceptionType.connectionError) {
+        errorMessage = "Connection error. Please check your internet connection.";
+      }
+
+      return ErrorResponse<AuthLoginApiResponse>(
+        error: Exception(dioError.toString()),
+        errorMessage: errorMessage,
+      );
     } catch (e) {
-      print('=== GENERAL EXCEPTION ===');
-      print('Error: $e');
-      throw Exception('Failed to login: $e');
+      log('=== GENERAL EXCEPTION ===');
+      log('Error: $e');
+      log('Error Type: ${e.runtimeType}');
+
+      return ErrorResponse<AuthLoginApiResponse>(
+        error: Exception(e.toString()),
+        errorMessage: "An unexpected error occurred. Please try again.",
+      );
     }
   }
-
 }
